@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    // Connect to the Ethereum network using web3
+    // Connecting to the Ethereum network using web3
     if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
     } else {
-        // Handle the case where the user doesn't have MetaMask or any other provider
+        // Handleing the case where the user doesn't have MetaMask or any other provider
         alert("Please install MetaMask or another Ethereum provider to use this application.");
         return;
     }
@@ -15,16 +15,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         { address: '0x7afb9de72A9A321fA535Bb36b7bF0c987b42b859', chain: 'Kroma' }
     ];
 
-    // Fetch the current and previous balances for each contract
+    // Fetching the current and previous balances for each contract
     for (const contract of contracts) {
         const currentBalance = await getBalance(contract.address);
         const previousBalance = await getBalanceAtTimestamp(contract.address, Date.now() - 12 * 60 * 60 * 1000);
         const percentageChange = calculatePercentageChange(previousBalance, currentBalance);
 
-        // Display the balance and percentage change
+        // Displaying the balance and percentage change
         displayBalance(contract.chain, currentBalance, percentageChange);
 
-        // Notify the user if the balance reduces by 10% or more
+        // Notifying the user if the balance reduces by 10% or more
         if (percentageChange < -10) {
             showNotification(`Warning: ${contract.chain} - Your balance has decreased by 10% or more in the last 12 hours!`);
         }
@@ -32,25 +32,25 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function getBalance(address) {
-    // Use web3 to get the native token balance of the specified address
+    // Using web3 to get the native token balance of the specified address
     const balance = await web3.eth.getBalance(address);
     return balance;
 }
 
 async function getBalanceAtTimestamp(address, timestamp) {
-    // Use web3 to get the native token balance of the specified address at a specific timestamp
+    // Using web3 to get the native token balance of the specified address at a specific timestamp
     const balance = await web3.eth.getBalance(address, timestamp);
     return balance;
 }
 
 function calculatePercentageChange(previousBalance, currentBalance) {
-    // Calculate the percentage change in balance
+    // Calculating the percentage change in balance
     const percentageChange = ((currentBalance - previousBalance) / previousBalance) * 100;
     return percentageChange;
 }
 
 function displayBalance(chain, balance, percentageChange) {
-    // Display the balance and percentage change on the HTML page
+    // Displaying the balance and percentage change on the HTML page
     const balanceContainer = document.getElementById('balance-container');
     const balanceElement = document.createElement('div');
     balanceElement.innerHTML = `<p>${chain} - Current Balance: ${web3.utils.fromWei(balance, 'ether')} ETH</p>`;
@@ -59,7 +59,6 @@ function displayBalance(chain, balance, percentageChange) {
 }
 
 function showNotification(message) {
-    // Display a creative notification alert to users
-    // You can customize this part based on your design preferences
+    // Displaying a notification alert to users
     alert(message);
 }
