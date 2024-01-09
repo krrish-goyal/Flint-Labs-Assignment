@@ -1,28 +1,28 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    // Infura API Key and Ethereum Network (Replace 'YOUR_INFURA_API_KEY' with your actual Infura API key)
-    const infuraApiKey = 'YOUR_INFURA_API_KEY';
+    // Infura API Key and Ethereum Network
+    const infuraApiKey = 6e3fda9b5851480fa9fabf58ea86acd7;
     const ethereumNetwork = 'mainnet'; // You can use 'rinkeby' or other testnets for testing
 
-    // Create a web3 instance using Infura
+    // Creating a web3 instance using Infura
     const web3 = new Web3(`https://${ethereumNetwork}.infura.io/v3/${infuraApiKey}`);
 
-    // Define the contracts and their corresponding chains
+    // Defining the contracts and their corresponding chains
     const contracts = [
         { address: '0xDCBc586cAb42a1D193CaCD165a81E5fbd9B428d7', chain: 'Mantle' },
         { address: '0xDCBc586cAb42a1D193CaCD165a81E5fbd9B428d7', chain: 'Linea' },
         { address: '0x7afb9de72A9A321fA535Bb36b7bF0c987b42b859', chain: 'Kroma' }
     ];
 
-    // Fetch the current and previous balances for each contract
+    // Fetching the current and previous balances for each contract
     for (const contract of contracts) {
         const currentBalance = await getBalance(web3, contract.address);
         const previousBalance = await getBalanceAtTimestamp(web3, contract.address, Date.now() - 12 * 60 * 60 * 1000);
         const percentageChange = calculatePercentageChange(previousBalance, currentBalance);
 
-        // Display the balance and percentage change
+        // Displaying the balance and percentage change
         displayBalance(contract.chain, currentBalance, percentageChange);
 
-        // Notify the user if the balance reduces by 10% or more
+        // Notifying the user if the balance reduces by 10% or more
         if (percentageChange < -10) {
             showNotification(`Warning: ${contract.chain} - Your balance has decreased by 10% or more in the last 12 hours!`);
         }
