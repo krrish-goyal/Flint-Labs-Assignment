@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
     // Infura API Key and Ethereum Network
     const infuraApiKey = 6e3fda9b5851480fa9fabf58ea86acd7;
-    const ethereumNetwork = 'mainnet'; // You can use 'rinkeby' or other testnets for testing
+    const ethereumNetwork = 'mainnet';
 
     // Creating a web3 instance using Infura
     const web3 = new Web3(`https://${ethereumNetwork}.infura.io/v3/${infuraApiKey}`);
@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const contracts = [
         { address: '0xDCBc586cAb42a1D193CaCD165a81E5fbd9B428d7', chain: 'Mantle' },
         { address: '0xDCBc586cAb42a1D193CaCD165a81E5fbd9B428d7', chain: 'Linea' },
-        { address: '0x7afb9de72A9A321fA535Bb36b7bF0c987b42b859', chain: 'Kroma' }
-    ];
+        { address: '0x7afb9de72A9A321fA535Bb36b7bF0c987b42b859', chain: 'Kroma' }];
 
     // Fetching the current and previous balances for each contract
     for (const contract of contracts) {
@@ -57,7 +56,6 @@ function displayBalance(chain, balance, percentageChange) {
 }
 
 function showNotification(message) {
-    // Display a creative notification alert to users
-    // You can customize this part based on your design preferences
+    // Displaying a notification alert to users
     alert(message);
 }
