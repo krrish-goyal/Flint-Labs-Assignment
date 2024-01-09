@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Token Balance Checker</title>
+</head>
+<body>
+    <h1>Native Token Balance Checker</h1>
+    <div>
+        <label for="contractAddress">Enter Contract Address:</label>
+        <input type="text" id="contractAddress" placeholder="Enter contract address">
+        <button onclick="checkBalance()">Check Balance</button>
+    </div>
+    <div id="result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+
+    <script>
+        async function checkBalance() {
+            const contractAddress = document.getElementById('contractAddress').value;
+            
+            if (!contractAddress) {
+                alert('Please enter a valid contract address');
+                return;
+            }
+
+            try {
+                // Connect to the Ethereum network
+                if (typeof window.ethereum !== 'undefined') {
+                    window.web3 = new Web3(window.ethereum);
+                    await window.ethereum.enable(); // Request account access
+                } else if (typeof window.web3 !== 'undefined') {
+                    // Legacy dApp browsers
+                    window.web3 = new Web3(window.web3.currentProvider);
+                } else {
+                    // Non-dApp browsers
+                    alert('Please install MetaMask to use this application.');
+                    return;
+                }
+
+                const web3 = window.web3;
+
+                // Get the native token balance of the contract
+                const balance = await web3.eth.getBalance(contractAddress);
+		
+                const balanceInEther = web3.utils.fromWei(balance, 'ether');
+
+                // Display the balance
+                document.getElementById('result').innerHTML = `<p>Native Token Balance: ${balanceInEther} ETH</p>`;
+
+                // Fetch the balance 12 hours ago
+		const previousBalance = await web3.eth.getBalance(contractAddress, Date.now() - 12 * 60 * 60 * 1000);
+                
+    		//const balance = await web3.eth.getBalance(address, timestamp);
+		// Calculate the percentage change
+                const percentageChange = calculatePercentageChange(previousBalance, balance);
+                
+                // Display the percentage change
+                document.getElementById('result').innerHTML += `<p>Percentage Change (last 12 hours): ${percentageChange.toFixed(2)}%</p>`;
+
+                // Notify the user if the balance reduced by 10%
+                if (percentageChange < -10) {
+                    alert('Warning: The balance has reduced by more than 10% in the last 12 hours!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please check the console for details.');
+            }
+        }
+
+        // Function to calculate percentage change
+        function calculatePercentageChange(previous, current) {
+            return ((current - previous) / previous) * 100;
+        }
+	
+    </script>
+</body>
+</html>
